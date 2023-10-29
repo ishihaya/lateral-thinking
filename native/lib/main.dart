@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lateral_thinking/domain/model/puzzle.dart';
+import 'package:lateral_thinking/infrastructure/repositoryimpl/mock/puzzle.dart';
 
 void main() => runApp(MyApp());
 
@@ -6,20 +8,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Card Flip Sample',
+      title: '水平思考ゲーム',
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
       home: CardFlipSample(),
     );
   }
-}
-
-class QuestionAnswer {
-  final String question;
-  final String answer;
-
-  QuestionAnswer({required this.question, required this.answer});
 }
 
 class CardFlipSample extends StatefulWidget {
@@ -31,12 +26,6 @@ class _CardFlipSampleState extends State<CardFlipSample> with SingleTickerProvid
   late AnimationController _controller;
   late Animation<double> _frontRotation;
   late Animation<double> _backRotation;
-
-  final List<QuestionAnswer> qaList = [
-    QuestionAnswer(question: 'theABO blood groups', answer: 'ABOの血液型'),
-    QuestionAnswer(question: 'theABO blood groups2', answer: 'ABOの血液型2'),
-    // 他の質問と回答のペアをここに追加
-  ];
 
   @override
   void initState() {
@@ -66,14 +55,22 @@ class _CardFlipSampleState extends State<CardFlipSample> with SingleTickerProvid
     double height = MediaQuery.of(context).size.height * 0.6;
     
     return Scaffold(
-      appBar: AppBar(title: Text('Card Flip Sample')),
-      body: Center(
-    //         widthFactor: 0.8,
-    // heightFactor: 0.6,
+      appBar: AppBar(title: Text('水平思考ゲーム')),
+      body: FutureBuilder<List<Puzzle>>(
+        future: MockPuzzleRepository().listPuzzles(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
+          final puzzles = snapshot.data!;
+          return Center(
         child:       PageView.builder(
-        itemCount: qaList.length,
+        itemCount: puzzles.length,
         itemBuilder: (context, index) {
-          final qa = qaList[index];
+          final puzzle = puzzles[index];
           return GestureDetector(
             onTap: _toggleCard,
             child: AnimatedBuilder(
@@ -84,14 +81,14 @@ class _CardFlipSampleState extends State<CardFlipSample> with SingleTickerProvid
                     child: Transform(
                     alignment: Alignment.center,
                     transform: Matrix4.identity()..rotateY(_frontRotation.value),
-                    child: _buildCard(qa.question, width, height),
+                    child: _buildCard(puzzle.question, width, height),
                   ),
                   );
                 } else {
                   return Center(child: Transform(
                     alignment: Alignment.center,
                     transform: Matrix4.identity()..rotateY(_backRotation.value),
-                    child: _buildCard(qa.answer, width, height),
+                    child: _buildCard(puzzle.answer, width, height),
                   ));
                 }
               },
@@ -99,8 +96,9 @@ class _CardFlipSampleState extends State<CardFlipSample> with SingleTickerProvid
           );
         },
       ),
-      )
-
+      );
+        },
+        )
     );
   }
 
