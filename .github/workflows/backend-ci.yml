@@ -4,8 +4,8 @@ name: backend-ci
 
 on:
   push:
-    paths:
-      - 'backend/**'
+    # paths:
+    #   - 'backend/**'
   workflow_dispatch:
 
 defaults:
@@ -47,7 +47,7 @@ jobs:
           version: v1.54
 
           # Optional: working directory, useful for monorepos
-          # working-directory: somedir
+          working-directory: ./backend
 
           # Optional: golangci-lint command line arguments.
           #
