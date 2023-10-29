@@ -5,8 +5,8 @@ import 'package:lateral_thinking/infrastructure/repositoryimpl/proto/app/v1/puzz
 import 'package:lateral_thinking/infrastructure/repositoryimpl/proto/app/v1/service.pbgrpc.dart';
 import 'package:lateral_thinking/infrastructure/repositoryimpl/protoconv/puzzle.dart';
 
-class PuzzleImpl implements PuzzleRepository {
-  PuzzleImpl({
+class PuzzleRepositoryImpl implements PuzzleRepository {
+  PuzzleRepositoryImpl({
     required this.client,
   }): super();
   final AppServiceClient client;
