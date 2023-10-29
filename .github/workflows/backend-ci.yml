@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   build:
-    uses: ./.github/workflows/build-go.yml
+    uses: ./.github/workflows/backend-build.yml
 
   test:
     runs-on: ubuntu-latest
