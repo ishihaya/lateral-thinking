@@ -2,10 +2,10 @@ name: backend-release
 
 on:
   # TODO: 現在dockerへのpushがうまくいっていないので、一旦コメントアウト
-  push:
-    # paths:
-    #   - 'backend/**'
-    # branches: [ "main" ]
+  # push:
+  #   paths:
+  #     - 'backend/**'
+  #   branches: [ "main" ]
   workflow_dispatch:
 
 defaults:
