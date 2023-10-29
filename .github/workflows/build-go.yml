@@ -1,0 +1,47 @@
+name: build-go
+
+on:
+  workflow_call:
+    inputs:
+      upload_binary:
+        type: boolean
+        default: false
+
+jobs:
+  build-go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: setup go
+        uses: actions/setup-go@v4
+        with:
+          go-version-file: "go.mod"
+      - id: go-cache
+        run: |
+          echo "gocache=$(go env GOCACHE)" >> $GITHUB_OUTPUT
+          echo "gomodcache=$(go env GOMODCACHE)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ${{ steps.go-cache.outputs.gocache }}
+            ${{ steps.go-cache.outputs.gomodcache }}
+            /opt/hostedtoolcache/protoc
+            /opt/hostedtoolcache/buf
+            ~/.cache/buf
+            ~/.cache/golangci-lint
+          key: go-${{ github.repository }}-v2-${{ runner.os }}-${{ runner.arch }}-${{ github.ref_name }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            go-${{ github.repository }}-v2-${{ runner.os }}-${{ runner.arch }}-${{ github.ref_name }}-${{ hashFiles('**/go.sum') }}
+            go-${{ github.repository }}-v2-${{ runner.os }}-${{ runner.arch }}-${{ github.ref_name }}-
+            go-${{ github.repository }}-v2-${{ runner.os }}-${{ runner.arch }}-main-
+          upload-chunk-size: 50000000 # 50MB
+      - name: download deps
+        run: go mod download
+      - name: build
+        run: make build
+      - name: upload binary
+        if: ${{ inputs.upload_binary == true }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: binary-go-app
+          path: ./bin

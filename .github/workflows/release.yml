@@ -1,0 +1,89 @@
+name: release
+
+on:
+  # TODO: 現在dockerへのpushがうまくいっていないので、一旦コメントアウト
+  # push:
+  # branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  GCP_PROJECT_ID: lateral-thinking-dev
+  GCP_PROJECT_NUMBER: 628260066266
+  CLOUD_RUN_SERVICE_NAME: app-api
+  DOCKER_IMAGE_NAME: asia-northeast1-docker.pkg.dev/lateral-thinking-dev/containers/server
+  SERVICE_ACCOUNT_NAME: github-actions@lateral-thinking-dev.iam.gserviceaccount.com
+
+jobs:
+  build-go:
+    uses: ./.github/workflows/build-go.yml
+    with:
+      upload_binary: true
+  deploy:
+    needs: build-go
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: binary-go-app
+          path: bin/
+
+      - name: setup Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: docker-server-${{ github.repository }}-v2-${{ runner.os }}-${{ runner.arch }}-${{ github.ref_name }}-${{ hashFiles('cmd/server/Dockerfile') }}
+          restore-keys: |
+            docker-server-${{ github.repository }}-v2-${{ runner.os }}-${{ runner.arch }}-${{ github.ref_name }}-${{ hashFiles('cmd/server/Dockerfile') }}
+            docker-server-${{ github.repository }}-v2-${{ runner.os }}-${{ runner.arch }}-${{ github.ref_name }}-
+            docker-server-${{ github.repository }}-v2-${{ runner.os }}-${{ runner.arch }}-main-
+          upload-chunk-size: 50000000 # 50MB
+
+      - name: configure docker
+        run: gcloud auth configure-docker -q asia-northeast1-docker.pkg.dev
+
+      - name: authenticate to GCP
+        id: google-auth
+        uses: google-github-actions/auth@v1
+        with:
+          create_credentials_file: true
+          workload_identity_provider: projects/${{ env.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/default/providers/github-actions
+          service_account: ${{ env.SERVICE_ACCOUNT_NAME }}
+      - name: setup google-cloud-sdk
+        run: gcloud auth login -q --brief --cred-file="${{ steps.google-auth.outputs.credentials_file_path }}"
+
+      - name: build and push container
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: cmd/server/Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          platforms: linux/amd64 # NOTE: arm64は現在サポートしていない
+          provenance: false
+          push: true
+          tags: |
+            ${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.DOCKER_IMAGE_NAME }}:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+      - name: refresh cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+      - name: Deploy with gcloud run deploy
+        env:
+          CLOUD_RUN_SERVICE_NAME: ${{ env.CLOUD_RUN_SERVICE_NAME }}
+          DOCKER_IMAGE_NAME: ${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+          PORT: 8080
+          GCP_PROJECT_ID: ${{ env.GCP_PROJECT_ID }}
+          GCP_REGION: asia-northeast1
+        run: gcloud run deploy $CLOUD_RUN_SERVICE_NAME --image=$IMAGE --port=$PORT --project=$GCP_PROJECT_ID --region=$GCP_REGION --platform=managed --allow-unauthenticated --quiet
