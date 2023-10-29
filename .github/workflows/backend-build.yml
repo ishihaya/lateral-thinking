@@ -7,9 +7,9 @@ on:
         type: boolean
         default: false
 
-# defaults:
-#   run:
-#     working-directory: ./backend
+defaults:
+  run:
+    working-directory: ./backend
 
 jobs:
   build-go:
