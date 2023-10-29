@@ -1,6 +1,6 @@
 
 import 'package:lateral_thinking/domain/model/puzzle.dart';
-import 'package:lateral_thinking/repository/puzzle.dart';
+import 'package:lateral_thinking/domain/repository/puzzle.dart';
 
 class PuzzleImpl implements PuzzleRepository {
   @override

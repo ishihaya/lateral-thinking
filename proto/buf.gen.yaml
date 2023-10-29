@@ -10,3 +10,5 @@ plugins:
     out: backend/internal/handler/proto/
     opt:
       - require_unimplemented_servers=true
+  - name: dart
+    out: native/lib/infrastructure/repositoryimpl/proto/
