@@ -12,3 +12,5 @@ plugins:
       - require_unimplemented_servers=true
   - name: dart
     out: native/lib/infrastructure/repositoryimpl/proto/
+    opt:
+      - grpc

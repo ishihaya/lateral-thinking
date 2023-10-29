@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$Puzzle {
+  String get id => throw _privateConstructorUsedError;
   String get question => throw _privateConstructorUsedError;
   String get answer => throw _privateConstructorUsedError;
 
@@ -28,7 +29,7 @@ abstract class $PuzzleCopyWith<$Res> {
   factory $PuzzleCopyWith(Puzzle value, $Res Function(Puzzle) then) =
       _$PuzzleCopyWithImpl<$Res, Puzzle>;
   @useResult
-  $Res call({String question, String answer});
+  $Res call({String id, String question, String answer});
 }
 
 /// @nodoc
@@ -44,10 +45,15 @@ class _$PuzzleCopyWithImpl<$Res, $Val extends Puzzle>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? question = null,
     Object? answer = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       question: null == question
           ? _value.question
           : question // ignore: cast_nullable_to_non_nullable
@@ -67,7 +73,7 @@ abstract class _$$PuzzleImplCopyWith<$Res> implements $PuzzleCopyWith<$Res> {
       __$$PuzzleImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String question, String answer});
+  $Res call({String id, String question, String answer});
 }
 
 /// @nodoc
@@ -81,10 +87,15 @@ class __$$PuzzleImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? question = null,
     Object? answer = null,
   }) {
     return _then(_$PuzzleImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       question: null == question
           ? _value.question
           : question // ignore: cast_nullable_to_non_nullable
@@ -100,8 +111,11 @@ class __$$PuzzleImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$PuzzleImpl implements _Puzzle {
-  const _$PuzzleImpl({required this.question, required this.answer});
+  const _$PuzzleImpl(
+      {required this.id, required this.question, required this.answer});
 
+  @override
+  final String id;
   @override
   final String question;
   @override
@@ -109,7 +123,7 @@ class _$PuzzleImpl implements _Puzzle {
 
   @override
   String toString() {
-    return 'Puzzle(question: $question, answer: $answer)';
+    return 'Puzzle(id: $id, question: $question, answer: $answer)';
   }
 
   @override
@@ -117,13 +131,14 @@ class _$PuzzleImpl implements _Puzzle {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PuzzleImpl &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.question, question) ||
                 other.question == question) &&
             (identical(other.answer, answer) || other.answer == answer));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, question, answer);
+  int get hashCode => Object.hash(runtimeType, id, question, answer);
 
   @JsonKey(ignore: true)
   @override
@@ -134,9 +149,12 @@ class _$PuzzleImpl implements _Puzzle {
 
 abstract class _Puzzle implements Puzzle {
   const factory _Puzzle(
-      {required final String question,
+      {required final String id,
+      required final String question,
       required final String answer}) = _$PuzzleImpl;
 
+  @override
+  String get id;
   @override
   String get question;
   @override
