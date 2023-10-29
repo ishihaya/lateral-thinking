@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package app.v1;
+
+message Puzzle {
+  string id = 1;
+  string question = 2;
+  string answer = 3;
+}
+
+message ListPuzzlesRequest {
+  uint32 limit = 1;
+}
+
+message ListPuzzlesResponse {
+  repeated Puzzle puzzles = 1;
+}
+
