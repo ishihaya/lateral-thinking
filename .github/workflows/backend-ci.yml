@@ -4,8 +4,8 @@ name: backend-ci
 
 on:
   push:
-    # paths:
-    #   - 'backend/**'
+    paths:
+      - 'backend/**'
   workflow_dispatch:
 
 defaults:
