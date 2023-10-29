@@ -1,10 +1,16 @@
-name: release
+name: backend-release
 
 on:
   # TODO: 現在dockerへのpushがうまくいっていないので、一旦コメントアウト
-  # push:
-  # branches: [ "main" ]
+  push:
+    # paths:
+    #   - 'backend/**'
+    # branches: [ "main" ]
   workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: ./backend
 
 env:
   GCP_PROJECT_ID: lateral-thinking-dev

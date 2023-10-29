@@ -1,4 +1,4 @@
-name: build-go
+name: backend-build
 
 on:
   workflow_call:
