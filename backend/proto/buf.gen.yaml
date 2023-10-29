@@ -1,0 +1,12 @@
+version: v1
+managed:
+  enabled: true
+  go_package_prefix:
+    default: .
+plugins:
+  - name: go
+    out: internal/handler/proto/
+  - plugin: go-grpc
+    out: internal/handler/proto/
+    opt:
+      - require_unimplemented_servers=true

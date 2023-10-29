@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package app.v1;
+
+import "app/v1/puzzle.proto";
+
+service AppService {
+  rpc ListPuzzles(ListPuzzlesRequest) returns (ListPuzzlesResponse) {}
+}
