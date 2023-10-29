@@ -19,7 +19,7 @@ jobs:
       - name: setup go
         uses: actions/setup-go@v4
         with:
-          go-version-file: "go.mod"
+          go-version-file: ./backend/go.mod
       - id: go-cache
         run: |
           echo "gocache=$(go env GOCACHE)" >> $GITHUB_OUTPUT
