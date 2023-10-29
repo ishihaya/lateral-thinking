@@ -5,8 +5,8 @@ managed:
     default: .
 plugins:
   - name: go
-    out: internal/handler/proto/
+    out: backend/internal/handler/proto/
   - plugin: go-grpc
-    out: internal/handler/proto/
+    out: backend/internal/handler/proto/
     opt:
       - require_unimplemented_servers=true

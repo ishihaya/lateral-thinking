@@ -4,7 +4,6 @@ lint:
 
 .PHONY: codegen
 codegen:
-	buf generate ./proto --template ./proto/buf.gen.yaml
 	go generate ./...
 
 .PHONY: format
