@@ -29,9 +29,9 @@ class _CardFlipSampleState extends State<_CardFlipSample> with SingleTickerProvi
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(duration: Duration(seconds: 1), vsync: this);
-    _frontRotation = Tween(begin: 0.0, end: -3.14 / 2).animate(CurvedAnimation(parent: _controller, curve: Interval(0.0, 0.5)));
-    _backRotation = Tween(begin: 3.14 / 2, end: 0.0).animate(CurvedAnimation(parent: _controller, curve: Interval(0.5, 1.0)));
+    _controller = AnimationController(duration: const Duration(seconds: 1), vsync: this);
+    _frontRotation = Tween(begin: 0.0, end: -3.14 / 2).animate(CurvedAnimation(parent: _controller, curve: const Interval(0.0, 0.5)));
+    _backRotation = Tween(begin: 3.14 / 2, end: 0.0).animate(CurvedAnimation(parent: _controller, curve: const Interval(0.5, 1.0)));
   }
 
   @override

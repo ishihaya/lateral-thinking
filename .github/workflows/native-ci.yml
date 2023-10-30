@@ -2,8 +2,8 @@ name: native-lint
 
 on:
   push:
-    # paths:
-    #   - 'native/**'
+    paths:
+      - 'native/**'
   pull_request:
     branches:
       - main
@@ -15,25 +15,6 @@ defaults:
     working-directory: ./native
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '3.13.0'
-    - name: Get Dependencies
-      run: flutter pub get
-    - name: Cache Flutter dependencies
-      uses: actions/cache@v3
-      with:
-        path: ~/.pub-cache
-        key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
-        restore-keys: ${{ runner.os }}-pub-
-    - name: Build
-      run: flutter build apk 
-
   lint:
     runs-on: ubuntu-latest
     steps:
