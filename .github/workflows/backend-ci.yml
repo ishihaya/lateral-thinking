@@ -6,6 +6,11 @@ on:
   push:
     paths:
       - 'backend/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'native/**'
   workflow_dispatch:
 
 defaults:
@@ -19,16 +24,17 @@ jobs:
   build:
     uses: ./.github/workflows/backend-build.yml
 
-  test:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.20'
-    - name: Test
-      run: go test -v ./...
+  # TODO テスト追加時に有効化
+  # test:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - name: Set up Go
+  #     uses: actions/setup-go@v4
+  #     with:
+  #       go-version: '1.20'
+  #   - name: Test
+  #     run: go test -v ./...
 
   lint:
     runs-on: ubuntu-latest
