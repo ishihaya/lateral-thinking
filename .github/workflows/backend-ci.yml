@@ -3,12 +3,7 @@
 name: backend-ci
 
 on:
-  push:
-    paths:
-      - 'backend/**'
   pull_request:
-    branches:
-      - main
     paths:
       - 'backend/**'
   workflow_dispatch:

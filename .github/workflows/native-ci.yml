@@ -1,12 +1,7 @@
 name: native-lint
 
 on:
-  push:
-    paths:
-      - 'native/**'
   pull_request:
-    branches:
-      - main
     paths:
       - 'native/**'
 
