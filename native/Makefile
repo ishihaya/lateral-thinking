@@ -13,3 +13,13 @@ check-device-id:
 
 lint:
 	flutter analyze .
+
+.PHONY: build-dev
+build-dev:
+	dart run flutter_launcher_icons -f launcher_icon-dev.yaml
+	flutter build ipa --release
+
+.PHONY: build-prd
+build-prd:
+	dart run flutter_launcher_icons -f launcher_icon-prd.yaml
+	flutter build ipa --release
