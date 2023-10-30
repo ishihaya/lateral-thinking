@@ -10,3 +10,6 @@ run:
 .PHONY: check-device-id
 check-device-id:
 	flutter devices
+
+lint:
+	flutter analyze .
