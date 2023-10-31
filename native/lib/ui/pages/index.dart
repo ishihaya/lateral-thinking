@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:lateral_thinking/domain/model/puzzle.dart';
 import 'package:lateral_thinking/infrastructure/repositoryimpl/mock/puzzle.dart';
 
-class App extends StatelessWidget {
-  const App({super.key});
+class IndexPage extends StatelessWidget {
+  const IndexPage({super.key});
 
   @override
   Widget build(BuildContext context) {
