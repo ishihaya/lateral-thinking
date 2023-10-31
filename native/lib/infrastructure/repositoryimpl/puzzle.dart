@@ -1,9 +1,17 @@
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lateral_thinking/domain/model/puzzle.dart';
 import 'package:lateral_thinking/domain/repository/puzzle.dart';
+import 'package:lateral_thinking/infrastructure/grpc/grpc.dart';
 import 'package:lateral_thinking/infrastructure/repositoryimpl/proto/app/v1/puzzle.pb.dart' as proto;
 import 'package:lateral_thinking/infrastructure/repositoryimpl/proto/app/v1/service.pbgrpc.dart';
 import 'package:lateral_thinking/infrastructure/repositoryimpl/protoconv/puzzle.dart';
+
+final puzzleRepositoryProvider = Provider<PuzzleRepository>((ref) {
+  return PuzzleRepositoryImpl(
+    client: AppServiceClient(ref.watch(grpcClientProvider)),
+  );
+});
 
 class PuzzleRepositoryImpl implements PuzzleRepository {
   PuzzleRepositoryImpl({

@@ -1,16 +1,80 @@
 # native
 
-A new Flutter project.
+もちろんです、以下が簡易的なREADMEのテンプレートです。
 
-## Getting Started
+## アーキテクチャ概要
 
-This project is a starting point for a Flutter application.
+このプロジェクトは以下のアーキテクチャを採用しています。
 
-A few resources to get you started if this is your first Flutter project:
+- Domain
+- Repository
+- State
+- UI
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+各層の役割と責任について説明します。
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+### Domain
+
+#### 役割
+
+- ビジネスロジックとデータの定義
+- エンティティ、値オブジェクト、ドメインイベント、ドメインサービスなど
+
+#### 責任
+
+- ビジネスルールを表現
+- データの整合性を保証
+
+---
+
+### Repository
+
+#### 役割
+
+- データの永続化メカニズム
+- Domain層とData層（API, DBなど）を繋ぐ
+
+#### 責任
+
+- エンティティのCRUD操作
+- データソースの抽象化
+
+---
+
+### State
+
+#### 役割
+
+- 状態管理
+- UI層とDomain層をつなぐ
+
+#### 責任
+
+- UIの状態を保持
+- イベントをビジネスロジックにディスパッチ
+
+---
+
+### UI
+
+#### 役割
+
+- ユーザーインターフェース
+- ユーザーからの入力とフィードバックの表示
+
+#### 責任
+
+- ユーザーとのインタラクション
+- Stateからの状態更新に応じてUIをレンダリング
+
+---
+
+## フロー
+
+1. UI層でイベントが発生
+2. Stateが該当するビジネスロジック（Domain）を呼び出す
+3. 必要に応じてRepositoryを通じてデータを持ってくる
+4. StateがUIの状態を更新
+5. UIが再レンダリング
